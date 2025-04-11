@@ -1,6 +1,6 @@
 import React from "react";
 import PageTemplate from "../components/templateMovieListPage";
-import { getMovies } from "../api/tmdb-api";
+import { getUpcomingMovies } from "../api/tmdb-api";
 import useFiltering from "../hooks/useFiltering";
 import MovieFilterUI, {
   titleFilter,
@@ -10,7 +10,6 @@ import { BaseMovieProps, DiscoverMovies } from "../types/interfaces";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
 import AddToFavouritesIcon from "../components/cardIcons/addToFavourites";
-
 
 const titleFiltering = {
   name: "title",
@@ -23,8 +22,12 @@ const genreFiltering = {
   condition: genreFilter,
 };
 
-const HomePage: React.FC = () => {
-  const { data, error, isLoading, isError } = useQuery<DiscoverMovies, Error>("discover", getMovies);
+const UpcomingMoviePage: React.FC = () => {
+  const { data, error, isLoading, isError } = useQuery<DiscoverMovies, Error>(
+    "upcomingMovies",
+    getUpcomingMovies
+  );
+
   const { filterValues, setFilterValues, filterFunction } = useFiltering(
     [titleFiltering, genreFiltering]
   );
@@ -37,7 +40,6 @@ const HomePage: React.FC = () => {
     return <h1>{error.message}</h1>;
   }
 
-
   const changeFilterValues = (type: string, value: string) => {
     const changedFilter = { name: type, value: value };
     const updatedFilterSet =
@@ -48,19 +50,17 @@ const HomePage: React.FC = () => {
   };
 
   const movies = data ? data.results : [];
-  console.log(movies)
   const displayedMovies = filterFunction(movies);
 
   return (
     <>
       <PageTemplate
-        title="Discover Movies"
+        title="Upcoming Movies"
         movies={displayedMovies}
         action={(movie: BaseMovieProps) => {
           return <AddToFavouritesIcon {...movie} />
         }}
       />
-      
       <MovieFilterUI
         onFilterValuesChange={changeFilterValues}
         titleFilter={filterValues[0].value}
@@ -68,8 +68,6 @@ const HomePage: React.FC = () => {
       />
     </>
   );
-  
-
-  
 };
-export default HomePage;
+
+export default UpcomingMoviePage;
