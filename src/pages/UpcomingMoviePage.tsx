@@ -64,7 +64,8 @@ const UpcomingMoviePage: React.FC = () => {
               <AddToFavouritesIcon {...movie} />
               <AddToMustWatchIcon movie={movie} />
             </>
-          )}          
+          )}
+          
       />
       <MovieFilterUI
         onFilterValuesChange={changeFilterValues}
