@@ -35,6 +35,7 @@ interface MovieCardProps {
   
   const isFavourite = favourites.find((id) => id === movie.id)? true : false;//NEW
    
+
     return (
         <Card sx={styles.card}>
         <CardHeader
@@ -88,8 +89,3 @@ interface MovieCardProps {
 }
 
 export default MovieCard;
-
-interface MovieCardProps  {
-    movie: BaseMovieProps;
-    selectFavourite: (movieId: number) => void;
-  } // Add this
