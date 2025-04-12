@@ -2,16 +2,12 @@ import React from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { getUpcomingMovies } from "../api/tmdb-api";
 import useFiltering from "../hooks/useFiltering";
-import MovieFilterUI, {
-  titleFilter,
-  genreFilter,
-} from "../components/movieFilterUI";
+import MovieFilterUI, { titleFilter, genreFilter } from "../components/movieFilterUI";
 import { BaseMovieProps, DiscoverMovies } from "../types/interfaces";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
 import AddToFavouritesIcon from "../components/cardIcons/addToFavourites";
 import AddToMustWatchIcon from "../components/cardIcons/addToMustWatch"; // adjust path if needed
-
 
 const titleFiltering = {
   name: "title",
@@ -26,9 +22,13 @@ const genreFiltering = {
 
 const UpcomingMoviePage: React.FC = () => {
   const { data, error, isLoading, isError } = useQuery<DiscoverMovies, Error>(
-    "upcomingMovies",
-    getUpcomingMovies
-  );
+    "upcomingMovies", // Query Key
+    getUpcomingMovies, // Fetch function
+    {
+      staleTime: 1000 * 60 * 5,  // Cache data for 5 minutes
+      cacheTime: 1000 * 60 * 30, // Keep cached data for 30 minutes
+    }
+  ); // <--- FIX: Add a comma after getUpcomingMovies here
 
   const { filterValues, setFilterValues, filterFunction } = useFiltering(
     [titleFiltering, genreFiltering]
@@ -60,12 +60,11 @@ const UpcomingMoviePage: React.FC = () => {
         title="Upcoming Movies"
         movies={displayedMovies}
         action={(movie: BaseMovieProps) => (
-            <>
-              <AddToFavouritesIcon {...movie} />
-              <AddToMustWatchIcon movie={movie} />
-            </>
-          )}
-          
+          <>
+            <AddToFavouritesIcon {...movie} />
+            <AddToMustWatchIcon movie={movie} />
+          </>
+        )}
       />
       <MovieFilterUI
         onFilterValuesChange={changeFilterValues}
