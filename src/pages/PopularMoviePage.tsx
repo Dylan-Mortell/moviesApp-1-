@@ -1,6 +1,6 @@
 import React from "react";
 import PageTemplate from "../components/templateMovieListPage";
-import { getUpcomingMovies } from "../api/tmdb-api";
+import { getPopularMovies } from "../api/tmdb-api";
 import useFiltering from "../hooks/useFiltering";
 import MovieFilterUI, {
   titleFilter,
@@ -26,10 +26,10 @@ const genreFiltering = {
   condition: genreFilter,
 };
 
-const UpcomingMoviePage: React.FC = () => {
+const PopularMoviePage: React.FC = () => {
   const { data, error, isLoading, isError } = useQuery<DiscoverMovies, Error>(
-    "upcomingMovies",
-    getUpcomingMovies
+    "Popular Movies",
+    getPopularMovies
   );
 
   const { filterValues, setFilterValues, filterFunction } = useFiltering(
@@ -62,7 +62,7 @@ const UpcomingMoviePage: React.FC = () => {
   return (
     <>
       <PageTemplate
-        title="Upcoming Movies"
+        title="Popular Movies"
         movies={displayedMovies}
         action={(movie: BaseMovieProps) => (
           <>
@@ -81,4 +81,4 @@ const UpcomingMoviePage: React.FC = () => {
   );
 };
 
-export default UpcomingMoviePage;
+export default PopularMoviePage;

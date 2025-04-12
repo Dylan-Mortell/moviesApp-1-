@@ -1,4 +1,4 @@
-import React, {MouseEvent, useContext} from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,13 +9,12 @@ import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";  // Import PlaylistAddIcon
 import Grid from "@mui/material/Grid";
-import img from '../../images/film-poster-placeholder.png';
-import { BaseMovieProps } from "../../types/interfaces"; 
+import { BaseMovieProps } from "../../types/interfaces";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import { MoviesContext } from "../../contexts/moviesContext";
-
+import { MoviesContext } from "../../contexts/moviesContext";  // Import MoviesContext
 
 const styles = {
   card: { maxWidth: 345 },
@@ -26,39 +25,39 @@ const styles = {
 };
 
 interface MovieCardProps {
-    movie: BaseMovieProps;
-    action: (m: BaseMovieProps) => React.ReactNode;
-  }
-  
-  const MovieCard: React.FC<MovieCardProps> = ({movie, action}) => {
-    const { favourites, addToFavourites } = useContext(MoviesContext);//NEW
-  
-  const isFavourite = favourites.find((id) => id === movie.id)? true : false;//NEW
-   
+  movie: BaseMovieProps;
+  action: (m: BaseMovieProps) => React.ReactNode;
+}
 
-    return (
-        <Card sx={styles.card}>
-        <CardHeader
-          avatar={
-            isFavourite ? (   //CHANGED
-              <Avatar sx={styles.avatar}>
-                <FavoriteIcon />
-              </Avatar>
-            ) : null
-          }
-          title={
-            <Typography variant="h5" component="p">
-              {movie.title}{" "}
-            </Typography>
-          }
-        />
+const MovieCard: React.FC<MovieCardProps> = ({ movie, action }) => {
+  const { favourites, mustWatch, addToFavourites, addToMustWatch } = useContext(MoviesContext);
+
+  const isFavourite = favourites.find((id) => id === movie.id) ? true : false;
+  const isMustWatch = mustWatch.find((id) => id === movie.id) ? true : false;  // Check if movie is in Must Watch
+
+  const handleMustWatchClick = () => {
+    addToMustWatch(movie);  // Add to Must Watch when the icon is clicked
+  };
+
+  return (
+    <Card sx={styles.card}>
+      <CardHeader
+        avatar={
+          isFavourite ? (
+            <Avatar sx={styles.avatar}>
+              <FavoriteIcon />
+            </Avatar>
+          ) : null
+        }
+        title={
+          <Typography variant="h5" component="p">
+            {movie.title}
+          </Typography>
+        }
+      />
       <CardMedia
         sx={styles.media}
-        image={
-          movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-            : img
-        }
+        image={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : "default-image.png"}
       />
       <CardContent>
         <Grid container>
@@ -71,21 +70,27 @@ interface MovieCardProps {
           <Grid item xs={6}>
             <Typography variant="h6" component="p">
               <StarRateIcon fontSize="small" />
-              {"  "} {movie.vote_average}{" "}
+              {"  "} {movie.vote_average}
             </Typography>
           </Grid>
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-      {action(movie)}
+        {action(movie)}
         <Link to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...
           </Button>
         </Link>
+
+        {/* Playlist Add Icon for Must Watch */}
+        <PlaylistAddIcon 
+          color={isMustWatch ? "primary" : "disabled"}  // Highlight if in Must Watch list
+          onClick={handleMustWatchClick}  // Handle click
+        />
       </CardActions>
     </Card>
   );
-}
+};
 
 export default MovieCard;
