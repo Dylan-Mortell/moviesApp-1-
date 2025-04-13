@@ -1,6 +1,6 @@
 import React from "react";
 import PageTemplate from "../components/templateMovieListPage";
-import { getUpcomingMovies } from "../api/tmdb-api";
+import { getTvSeries } from "../api/tmdb-api"; // Use the getTvSeries API instead of getUpcomingMovies
 import useFiltering from "../hooks/useFiltering";
 import MovieFilterUI, {
   titleFilter,
@@ -10,9 +10,9 @@ import { BaseMovieProps, DiscoverMovies } from "../types/interfaces";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
 import AddToFavouritesIcon from "../components/cardIcons/addToFavourites";
-import AddToMustWatchIcon from "../components/cardIcons/addToMustWatch";  // Adjust path if needed
-import { MoviesContext } from "../contexts/moviesContext";  // Import MoviesContext
-import { useContext } from "react";  // Import useContext
+import AddToMustWatchIcon from "../components/cardIcons/addToMustWatch";
+import { MoviesContext } from "../contexts/moviesContext";
+import { useContext } from "react";
 
 const titleFiltering = {
   name: "title",
@@ -29,7 +29,7 @@ const genreFiltering = {
 const TvSeriesPage: React.FC = () => {
   const { data, error, isLoading, isError } = useQuery<DiscoverMovies, Error>(
     "Tv Series",
-    getUpcomingMovies
+    getTvSeries 
   );
 
   const { filterValues, setFilterValues, filterFunction } = useFiltering(
@@ -56,14 +56,14 @@ const TvSeriesPage: React.FC = () => {
     setFilterValues(updatedFilterSet);
   };
 
-  const movies = data ? data.results : [];
-  const displayedMovies = filterFunction(movies);
+  const tvSeries = data ? data.results : []; 
+  const displayedTvSeries = filterFunction(tvSeries);
 
   return (
     <>
       <PageTemplate
         title="TV Series"
-        movies={displayedMovies}
+        movies={displayedTvSeries} 
         action={(movie: BaseMovieProps) => (
           <>
             <AddToFavouritesIcon {...movie} />
