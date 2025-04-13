@@ -12,18 +12,18 @@ interface MovieContextInterface {
 
 const initialContextState: MovieContextInterface = {
   favourites: [],
-  mustWatch: [],  // Initialize Must Watch as an empty array
+  mustWatch: [],  
   addToFavourites: () => {},
   removeFromFavourites: () => {},
   addReview: () => {},
-  addToMustWatch: () => {},  // Placeholder function for Must Watch
+  addToMustWatch: () => {},  
 };
 
 export const MoviesContext = React.createContext<MovieContextInterface>(initialContextState);
 
 const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [favourites, setFavourites] = useState<number[]>([]);
-  const [mustWatch, setMustWatch] = useState<number[]>([]);  // New state for Must Watch movies
+  const [mustWatch, setMustWatch] = useState<number[]>([]); 
   const [myReviews, setMyReviews] = useState<{ [id: number]: Review }>({}); 
 
   const addToFavourites = useCallback((movie: BaseMovieProps) => {

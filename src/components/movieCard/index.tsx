@@ -9,12 +9,12 @@ import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";  // Import PlaylistAddIcon
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";  
 import Grid from "@mui/material/Grid";
 import { BaseMovieProps } from "../../types/interfaces";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import { MoviesContext } from "../../contexts/moviesContext";  // Import MoviesContext
+import { MoviesContext } from "../../contexts/moviesContext";  
 
 const styles = {
   card: { maxWidth: 345 },
@@ -36,7 +36,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, action }) => {
   const isMustWatch = mustWatch.find((id) => id === movie.id) ? true : false;  // Check if movie is in Must Watch
 
   const handleMustWatchClick = () => {
-    addToMustWatch(movie);  // Add to Must Watch when the icon is clicked
+    addToMustWatch(movie);  
   };
 
   return (

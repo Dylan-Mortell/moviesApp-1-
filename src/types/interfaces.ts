@@ -32,7 +32,7 @@ export interface BaseMovieProps {
 
   export interface MovieImage {
     file_path: string;
-    aspect_ratio?: number; //some props are optional...
+    aspect_ratio?: number; 
     height?: number;
     iso_639_1?: string;
     vote_average?: number;
@@ -77,6 +77,13 @@ export interface BaseMovieProps {
     agree: boolean,
     rating: number,
     movieId: number,
+  }
+  
+  export interface ActorProps {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string | null;
   }
 
   
