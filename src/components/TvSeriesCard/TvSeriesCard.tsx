@@ -14,7 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { Link } from "react-router-dom";
-import { BaseMovieProps } from "../../types/interfaces"; // ✅ use BaseMovieProps
+import { BaseMovieProps } from "../../types/interfaces";
 
 const styles = {
   card: { maxWidth: 345 },
@@ -22,14 +22,20 @@ const styles = {
   avatar: {
     backgroundColor: "rgb(255, 0, 0)",
   },
+  link: {
+    textDecoration: "none",
+    color: "inherit",
+  },
 };
 
 interface TvSeriesCardProps {
-  tvSeries: BaseMovieProps; // ✅ changed from TvSeriesDetailsProps
+  tvSeries: BaseMovieProps;
   action: (tv: BaseMovieProps) => React.ReactNode;
 }
 
 const TvSeriesCard: React.FC<TvSeriesCardProps> = ({ tvSeries, action }) => {
+  const linkTarget = `/TvSeries/${tvSeries.id}`;
+
   return (
     <Card sx={styles.card}>
       <CardHeader
@@ -39,20 +45,24 @@ const TvSeriesCard: React.FC<TvSeriesCardProps> = ({ tvSeries, action }) => {
           </Avatar>
         }
         title={
-          <Typography variant="h6" component="p">
-            {tvSeries.name || tvSeries.title} {/* TMDB sometimes returns `name` for TV series */}
-          </Typography>
+          <Link to={linkTarget} style={styles.link}>
+            <Typography variant="h6" component="p">
+              {tvSeries.name || tvSeries.title}
+            </Typography>
+          </Link>
         }
       />
-      <CardMedia
-        sx={styles.media}
-        image={
-          tvSeries.poster_path
-            ? `https://image.tmdb.org/t/p/w500/${tvSeries.poster_path}`
-            : "/default-poster.png"
-        }
-        title={tvSeries.name || tvSeries.title}
-      />
+      <Link to={linkTarget}>
+        <CardMedia
+          sx={styles.media}
+          image={
+            tvSeries.poster_path
+              ? `https://image.tmdb.org/t/p/w500/${tvSeries.poster_path}`
+              : "/default-poster.png"
+          }
+          title={tvSeries.name || tvSeries.title}
+        />
+      </Link>
       <CardContent>
         <Grid container>
           <Grid item xs={6}>
@@ -71,7 +81,7 @@ const TvSeriesCard: React.FC<TvSeriesCardProps> = ({ tvSeries, action }) => {
       </CardContent>
       <CardActions disableSpacing>
         {action(tvSeries)}
-        <Link to={`/TvSeries/${tvSeries.id}`}>
+        <Link to={linkTarget}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...
           </Button>

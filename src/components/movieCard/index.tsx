@@ -22,6 +22,10 @@ const styles = {
   avatar: {
     backgroundColor: "rgb(255, 0, 0)",
   },
+  link: {
+    textDecoration: "none",
+    color: "inherit"
+  }
 };
 
 interface MovieCardProps {
@@ -33,7 +37,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, action }) => {
   const { favourites, mustWatch, addToFavourites, addToMustWatch } = useContext(MoviesContext);
 
   const isFavourite = favourites.find((id) => id === movie.id) ? true : false;
-  const isMustWatch = mustWatch.find((id) => id === movie.id) ? true : false;  // Check if movie is in Must Watch
+  const isMustWatch = mustWatch.find((id) => id === movie.id) ? true : false;
 
   const handleMustWatchClick = () => {
     addToMustWatch(movie);  
@@ -50,15 +54,24 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, action }) => {
           ) : null
         }
         title={
-          <Typography variant="h5" component="p">
-            {movie.title}
-          </Typography>
+          <Link to={`/movies/${movie.id}`} style={styles.link}>
+            <Typography variant="h5" component="p">
+              {movie.title}
+            </Typography>
+          </Link>
         }
       />
-      <CardMedia
-        sx={styles.media}
-        image={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : "default-image.png"}
-      />
+      <Link to={`/movies/${movie.id}`}>
+        <CardMedia
+          sx={styles.media}
+          image={
+            movie.poster_path
+              ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+              : "default-image.png"
+          }
+          title={movie.title}
+        />
+      </Link>
       <CardContent>
         <Grid container>
           <Grid item xs={6}>
@@ -82,11 +95,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, action }) => {
             More Info ...
           </Button>
         </Link>
-
-        {/* Playlist Add Icon for Must Watch */}
         <PlaylistAddIcon 
-          color={isMustWatch ? "primary" : "disabled"}  // Highlight if in Must Watch list
-          onClick={handleMustWatchClick}  // Handle click
+          color={isMustWatch ? "primary" : "disabled"}
+          onClick={handleMustWatchClick}
         />
       </CardActions>
     </Card>
