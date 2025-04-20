@@ -16,19 +16,36 @@ export interface BaseMovieProps {
     vote_count: number;
     favourite?: boolean;
     genre_ids?: number[];
+    name?: string;
+    first_air_date?: string;
   }
 
   export interface BaseMovieListProps {
     movies: BaseMovieProps[];
     action: (m: BaseMovieProps) => React.ReactNode;
   }
-  
+
+  interface TvSeriesListProps {
+    tvSeries: BaseMovieProps[];
+    action: (tv: BaseMovieProps) => React.ReactNode;
+  }
+
   export interface MovieDetailsProps extends BaseMovieProps {
     genres: {
       id: number;
       name: string;
     }[];
   }
+
+  export interface TvSeriesDetailsProps extends MovieDetailsProps {
+    name: string;
+    first_air_date: string;
+    last_air_date: string;
+    episode_run_time: number[];  
+    seasons: { id: number; season_number: number }[];
+
+}
+
 
   export interface MovieImage {
     file_path: string;
@@ -47,11 +64,6 @@ export interface BaseMovieProps {
 
   export type FilterOption = "title" | "genre";
 
-  export interface Review{
-    id: string;
-    content: string
-    author: string
-  }
 
   export interface GenreData {
     genres: {
@@ -72,11 +84,13 @@ export interface BaseMovieProps {
   }
 
   export interface Review {
-    author: string,
-    content: string,
-    agree: boolean,
-    rating: number,
-    movieId: number,
+    id: string;
+    author: string;
+    content: string;
+    agree?: boolean;
+    rating?: number;
+    movieId?: number;
+    tvSeriesId?: number;
   }
   
   export interface ActorProps {
