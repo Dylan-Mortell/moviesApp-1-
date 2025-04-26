@@ -1,72 +1,85 @@
 import React, { useState, useCallback } from "react";
 import { BaseMovieProps, Review } from "../types/interfaces";
 
+
+export interface FantasyMovieFormData {
+  title: string;
+  overview: string;
+  genre: string;
+  releaseDate: string;
+  runtime: string;
+  productionCompany: string;
+}
+
 interface MovieContextInterface {
   favourites: number[];
-  mustWatch: number[];  // New state for Must Watch movies
+  mustWatch: number[];
   addToFavourites: (movie: BaseMovieProps) => void;
   removeFromFavourites: (movie: BaseMovieProps) => void;
   addReview: (movie: BaseMovieProps, review: Review) => void;
-  addToMustWatch: (movie: BaseMovieProps) => void;  // Function to add to Must Watch list
+  addToMustWatch: (movie: BaseMovieProps) => void;
+
+
+  fantasyMovies: FantasyMovieFormData[];
+  addFantasyMovie: (movie: FantasyMovieFormData) => void;
 }
+
 
 const initialContextState: MovieContextInterface = {
   favourites: [],
-  mustWatch: [],  
+  mustWatch: [],
   addToFavourites: () => {},
   removeFromFavourites: () => {},
   addReview: () => {},
-  addToMustWatch: () => {},  
+  addToMustWatch: () => {},
+
+  
+  fantasyMovies: [],
+  addFantasyMovie: () => {},
 };
 
 export const MoviesContext = React.createContext<MovieContextInterface>(initialContextState);
 
 const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [favourites, setFavourites] = useState<number[]>([]);
-  const [mustWatch, setMustWatch] = useState<number[]>([]); 
-  const [myReviews, setMyReviews] = useState<{ [id: number]: Review }>({}); 
+  const [mustWatch, setMustWatch] = useState<number[]>([]);
+  const [myReviews, setMyReviews] = useState<{ [id: number]: Review }>({});
+  const [fantasyMovies, setFantasyMovies] = useState<FantasyMovieFormData[]>([]); // ✅
 
   const addToFavourites = useCallback((movie: BaseMovieProps) => {
-    setFavourites((prevFavourites) => {
-      if (!prevFavourites.includes(movie.id)) {
-        return [...prevFavourites, movie.id];
-      }
-      return prevFavourites;
-    });
+    setFavourites((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
   }, []);
 
   const removeFromFavourites = useCallback((movie: BaseMovieProps) => {
-    setFavourites((prevFavourites) =>
-      prevFavourites.filter((mId) => mId !== movie.id)
-    );
+    setFavourites((prev) => prev.filter((id) => id !== movie.id));
   }, []);
 
   const addReview = useCallback((movie: BaseMovieProps, review: Review) => {
-    setMyReviews((prevReviews) => ({
-      ...prevReviews,
-      [movie.id]: review,
-    }));
+    setMyReviews((prev) => ({ ...prev, [movie.id]: review }));
   }, []);
 
-  // Function to add movie to the Must Watch list
   const addToMustWatch = useCallback((movie: BaseMovieProps) => {
-    setMustWatch((prevMustWatch) => {
-      if (!prevMustWatch.includes(movie.id)) {
-        return [...prevMustWatch, movie.id];
-      }
-      return prevMustWatch;
-    });
+    setMustWatch((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
+  }, []);
+
+ 
+  const addFantasyMovie = useCallback((movie: FantasyMovieFormData) => {
+    setFantasyMovies((prev) => [...prev, movie]);
   }, []);
 
   return (
     <MoviesContext.Provider
       value={{
         favourites,
-        mustWatch,  // Provide the Must Watch state
+        mustWatch,
         addToFavourites,
         removeFromFavourites,
         addReview,
-        addToMustWatch,  // Provide the addToMustWatch function
+        addToMustWatch,
+
+        
+        fantasyMovies,
+        addFantasyMovie,
       }}
     >
       {children}

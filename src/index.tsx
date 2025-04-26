@@ -43,6 +43,7 @@ const queryClient = new QueryClient({
             <Route path="/movies/popular" element={<PopularMoviePage />} />
             <Route path="/TvSeries" element={<TvSeriesPage/>} />
             <Route path="/TvSeries/:id" element={<TvSeriesDetailsPage />} />
+            <Route path="/fantasy/movies" element={<FantasyMoviesPage />} />
             </Routes>
         </MoviesContextProvider>
       </BrowserRouter>
