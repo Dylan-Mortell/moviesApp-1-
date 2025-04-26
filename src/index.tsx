@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from 'react-dom/client'
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
 import HomePage from "./pages/homePage";
 import MoviePage from "./pages/movieDetailsPage";
@@ -16,6 +16,8 @@ import TvSeriesPage from "./pages/TvSeriesPage";
 import TvSeriesDetailsPage from "./pages/TvSeriesDetailsPage";
 import FantasyMoviesPage from "./pages/FantasyMoviePage";
 import PrivateRoute from './routes/PrivateRoute'; 
+import FavouriteActorsPage from "./pages/favouriteActorsPage"; // Import favorite actors page
+import FavouriteTVSeriesPage from "./pages/favouriteTVSeriesPage"; // Import favorite TV series page
 
 // Create the QueryClient instance
 const queryClient = new QueryClient({
@@ -64,6 +66,22 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route 
+              path="/actors/favourites" 
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <FavouriteActorsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route 
+              path="/tvseries/favourites" 
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <FavouriteTVSeriesPage />
+                </PrivateRoute>
+              }
+            />
 
             {/* Public Routes for Reviews */}
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
@@ -82,4 +100,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-)
+);
