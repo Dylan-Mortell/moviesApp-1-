@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import MovieDetails from "../components/movieDetails";
 import PageTemplate from "../components/templateMoviePage";
 import { getMovie, getSimilarMovies, getMovieCredits } from "../api/tmdb-api";
@@ -82,7 +82,9 @@ const MovieDetailsPage: React.FC = () => {
                       alt={actor.name}
                       style={{ borderRadius: "50%", width: "150px", height: "150px" }}
                     />
-                    <h3>{actor.name}</h3>
+                    <Link to={`/person/${actor.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                      <h3>{actor.name}</h3>
+                    </Link>
                     <p>{actor.character}</p>
                   </div>
                 ))}

@@ -10,6 +10,7 @@ import NavigationIcon from "@mui/icons-material/Navigation";
 import Fab from "@mui/material/Fab";
 import Drawer from "@mui/material/Drawer";
 import MovieReviews from '../movieReviews'
+import { Link } from "react-router-dom";
 
 const styles = {
     chipSet: {
@@ -51,7 +52,12 @@ const MovieDetails: React.FC<MovieDetailsProps> = (movie) => {
                 </li>
                 {movie.genres.map((g) => (
                     <li key={g.name}>
-                        <Chip label={g.name} />
+                        <Chip 
+                        label={g.name} 
+                        component={Link}
+                        to={`/genres/${g.id}`} 
+                        clickable
+                        />
                     </li>
                 ))}
             </Paper>
