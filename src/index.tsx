@@ -14,6 +14,8 @@ import UpcomingMoviePage from "./pages/UpcomingMoviePage";
 import PopularMoviePage from "./pages/PopularMoviePage";
 import TvSeriesPage from "./pages/TvSeriesPage";
 import TvSeriesDetailsPage from "./pages/TvSeriesDetailsPage";
+import FantasyMoviesPage from "./pages/FantasyMoviePage";
+
 
 
 const queryClient = new QueryClient({

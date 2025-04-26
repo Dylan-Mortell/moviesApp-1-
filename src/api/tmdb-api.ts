@@ -108,8 +108,21 @@ export const getMovies = () => {
         throw error;
       });
   };
+
+  export const getFantasyMovies = async () => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${import.meta.env.VITE_TMDB_KEY}&with_genres=14&language=en-US`
+    );
   
+    if (!response.ok) {
+      throw new Error(`Failed to fetch fantasy movies. Status: ${response.status}`);
+    }
   
+    const data = await response.json();
+    return data.results; 
+  };
+  
+
   
   export const getPopularMovies = () => {
     return fetch(
