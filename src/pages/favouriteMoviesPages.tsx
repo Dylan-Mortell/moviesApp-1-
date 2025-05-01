@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { MoviesContext } from "../contexts/moviesContext";
 import { useQueries } from "react-query";
@@ -12,13 +12,12 @@ import MovieFilterUI, {
 import RemoveFromFavourites from "../components/cardIcons/removeFromFavourites";
 import WriteReview from "../components/cardIcons/writeReview";
 
-
-
 const titleFiltering = {
   name: "title",
   value: "",
   condition: titleFilter,
 };
+
 const genreFiltering = {
   name: "genre",
   value: "0",
@@ -26,51 +25,60 @@ const genreFiltering = {
 };
 
 const FavouriteMoviesPage: React.FC = () => {
-  const { favourites: movieIds } = useContext(MoviesContext);
-  const { filterValues, setFilterValues, filterFunction } = useFiltering(
-    [titleFiltering, genreFiltering]
-  );
+  const {
+    favourites: movieIds,
+    moveFavouriteUp,
+    moveFavouriteDown,
+  } = useContext(MoviesContext);
 
-  // Create an array of queries and run them in parallel.
+  const { filterValues, setFilterValues, filterFunction } = useFiltering([
+    titleFiltering,
+    genreFiltering,
+  ]);
+
   const favouriteMovieQueries = useQueries(
-    movieIds.map((movieId) => {
-      return {
-        queryKey: ["movie", movieId],
-        queryFn: () => getMovie(movieId.toString()),
-      };
-    })
+    movieIds.map((movieId) => ({
+      queryKey: ["movie", movieId],
+      queryFn: () => getMovie(movieId.toString()),
+    }))
   );
 
-  // Check if any of the parallel queries is still loading.
   const isLoading = favouriteMovieQueries.find((m) => m.isLoading === true);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
+  if (isLoading) return <Spinner />;
 
   const allFavourites = favouriteMovieQueries.map((q) => q.data);
-  const displayedMovies = allFavourites
-    ? filterFunction(allFavourites)
-    : [];
+  const displayedMovies = filterFunction(allFavourites);
 
   const changeFilterValues = (type: string, value: string) => {
     const changedFilter = { name: type, value: value };
     const updatedFilterSet =
-      type === "title" ? [changedFilter, filterValues[1]] : [filterValues[0], changedFilter];
+      type === "title"
+        ? [changedFilter, filterValues[1]]
+        : [filterValues[0], changedFilter];
     setFilterValues(updatedFilterSet);
   };
 
   return (
     <>
-        <PageTemplate
+      <PageTemplate
         title="Favourite Movies"
         movies={displayedMovies}
         action={(movie) => {
+          const index = movieIds.findIndex((id) => id === movie.id);
           return (
-            <>
+            <div>
+              <button onClick={() => moveFavouriteUp(index)} disabled={index === 0}>
+                ↑
+              </button>
+              <button
+                onClick={() => moveFavouriteDown(index)}
+                disabled={index === movieIds.length - 1}
+              >
+                ↓
+              </button>
               <RemoveFromFavourites {...movie} />
               <WriteReview {...movie} />
-            </>
+            </div>
           );
         }}
       />

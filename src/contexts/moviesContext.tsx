@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BaseMovieProps, Review } from "../types/interfaces";
-
 
 export interface FantasyMovieFormData {
   title: string;
@@ -16,24 +15,23 @@ interface MovieContextInterface {
   mustWatch: number[];
   addToFavourites: (movie: BaseMovieProps) => void;
   removeFromFavourites: (movie: BaseMovieProps) => void;
+  moveFavouriteUp: (index: number) => void;
+  moveFavouriteDown: (index: number) => void;
   addReview: (movie: BaseMovieProps, review: Review) => void;
   addToMustWatch: (movie: BaseMovieProps) => void;
-
-
   fantasyMovies: FantasyMovieFormData[];
   addFantasyMovie: (movie: FantasyMovieFormData) => void;
 }
-
 
 const initialContextState: MovieContextInterface = {
   favourites: [],
   mustWatch: [],
   addToFavourites: () => {},
   removeFromFavourites: () => {},
+  moveFavouriteUp: () => {},
+  moveFavouriteDown: () => {},
   addReview: () => {},
   addToMustWatch: () => {},
-
-  
   fantasyMovies: [],
   addFantasyMovie: () => {},
 };
@@ -44,7 +42,24 @@ const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   const [favourites, setFavourites] = useState<number[]>([]);
   const [mustWatch, setMustWatch] = useState<number[]>([]);
   const [myReviews, setMyReviews] = useState<{ [id: number]: Review }>({});
-  const [fantasyMovies, setFantasyMovies] = useState<FantasyMovieFormData[]>([]); // ✅
+  const [fantasyMovies, setFantasyMovies] = useState<FantasyMovieFormData[]>([]);
+
+  //  Load favourites on initial render
+  useEffect(() => {
+    const stored = localStorage.getItem("movieFavourites");
+    if (stored) {
+      try {
+        setFavourites(JSON.parse(stored));
+      } catch (e) {
+        console.error("Failed to parse stored favourites:", e);
+      }
+    }
+  }, []);
+
+  //  Save favourites whenever they change
+  useEffect(() => {
+    localStorage.setItem("movieFavourites", JSON.stringify(favourites));
+  }, [favourites]);
 
   const addToFavourites = useCallback((movie: BaseMovieProps) => {
     setFavourites((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
@@ -52,6 +67,24 @@ const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 
   const removeFromFavourites = useCallback((movie: BaseMovieProps) => {
     setFavourites((prev) => prev.filter((id) => id !== movie.id));
+  }, []);
+
+  const moveFavouriteUp = useCallback((index: number) => {
+    setFavourites((prev) => {
+      if (index <= 0) return prev;
+      const updated = [...prev];
+      [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
+      return updated;
+    });
+  }, []);
+
+  const moveFavouriteDown = useCallback((index: number) => {
+    setFavourites((prev) => {
+      if (index >= prev.length - 1) return prev;
+      const updated = [...prev];
+      [updated[index + 1], updated[index]] = [updated[index], updated[index + 1]];
+      return updated;
+    });
   }, []);
 
   const addReview = useCallback((movie: BaseMovieProps, review: Review) => {
@@ -62,7 +95,6 @@ const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     setMustWatch((prev) => (prev.includes(movie.id) ? prev : [...prev, movie.id]));
   }, []);
 
- 
   const addFantasyMovie = useCallback((movie: FantasyMovieFormData) => {
     setFantasyMovies((prev) => [...prev, movie]);
   }, []);
@@ -74,10 +106,10 @@ const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         mustWatch,
         addToFavourites,
         removeFromFavourites,
+        moveFavouriteUp,
+        moveFavouriteDown,
         addReview,
         addToMustWatch,
-
-        
         fantasyMovies,
         addFantasyMovie,
       }}
