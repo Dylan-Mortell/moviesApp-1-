@@ -1,6 +1,6 @@
 import React from "react";
 import PageTemplate from "../components/templateMovieListPage";
-import { getTvSeries } from "../api/tmdb-api"; // Use the getTvSeries API instead of getUpcomingMovies
+import { getTvSeries } from "../api/tmdb-api"; 
 import useFiltering from "../hooks/useFiltering";
 import MovieFilterUI, {
   titleFilter,

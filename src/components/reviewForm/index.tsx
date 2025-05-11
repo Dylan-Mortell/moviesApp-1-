@@ -36,7 +36,7 @@ const ReviewForm: React.FC<BaseMovieProps> = (movie) => {
       const navigate = useNavigate();
       const context = useContext(MoviesContext);
       const [rating, setRating] = useState(3);
-      const [open, setOpen] = useState(false);  //NEW
+      const [open, setOpen] = useState(false);  
 
     
       const handleRatingChange = (event: ChangeEvent<HTMLInputElement>) => {

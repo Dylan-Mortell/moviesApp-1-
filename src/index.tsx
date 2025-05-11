@@ -16,8 +16,8 @@ import TvSeriesPage from "./pages/TvSeriesPage";
 import TvSeriesDetailsPage from "./pages/TvSeriesDetailsPage";
 import FantasyMoviesPage from "./pages/FantasyMoviePage";
 import PrivateRoute from './routes/PrivateRoute'; 
-import FavouriteActorsPage from "./pages/favouriteActorsPage"; // Import favorite actors page
-import FavouriteTVSeriesPage from "./pages/favouriteTVSeriesPage"; // Import favorite TV series page
+import FavouriteActorsPage from "./pages/favouriteActorsPage"; 
+import FavouriteTVSeriesPage from "./pages/favouriteTVSeriesPage"; 
 
 // Create the QueryClient instance
 const queryClient = new QueryClient({

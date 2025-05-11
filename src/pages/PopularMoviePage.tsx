@@ -10,9 +10,9 @@ import { BaseMovieProps, DiscoverMovies } from "../types/interfaces";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
 import AddToFavouritesIcon from "../components/cardIcons/addToFavourites";
-import AddToMustWatchIcon from "../components/cardIcons/addToMustWatch";  // Adjust path if needed
-import { MoviesContext } from "../contexts/moviesContext";  // Import MoviesContext
-import { useContext } from "react";  // Import useContext
+import AddToMustWatchIcon from "../components/cardIcons/addToMustWatch"; 
+import { MoviesContext } from "../contexts/moviesContext";  
+import { useContext } from "react";  
 
 const titleFiltering = {
   name: "title",
